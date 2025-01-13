@@ -2,18 +2,17 @@ import { Suspense } from 'react'
 
 import { MovieCard } from '@/components/movie-card'
 import { Search } from '@/components/search'
-import { getPopularMovies, getGenres } from '@/lib/movie-service'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { CategoryFilter } from '@/components/category-filter'
+import { searchMovies, getGenres } from '@/lib/movie-service'
 
-export default async function Home({
+export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { genre?: string }
+  searchParams: { query: string }
 }) {
+  const data = await searchMovies(searchParams.query)
   const genresData = await getGenres()
-  const selectedGenre = searchParams.genre ? parseInt(searchParams.genre) : undefined
-  const data = await getPopularMovies(1, selectedGenre)
 
   return (
     <main className="container mx-auto py-6 px-4">
@@ -24,6 +23,9 @@ export default async function Home({
         </div>
         <Search />
       </div>
+      <h1 className="text-2xl font-bold mb-6">
+        Search results for: {searchParams.query}
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <Suspense fallback={<div>Loading...</div>}>
           {data?.results && data.results.length > 0 ? (
