@@ -1,40 +1,42 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Check, ChevronDown } from 'lucide-react'
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Check, ChevronDown } from "lucide-react";
 
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from '@/components/ui/command'
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
+} from "@/components/ui/popover";
 
 interface Genre {
-  id: number
-  name: string
+  id: number;
+  name: string;
 }
 
 interface CategoryFilterProps {
-  genres: Genre[]
+  genres: Genre[];
 }
 
 export function CategoryFilter({ genres }: CategoryFilterProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState('')
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
 
-  const currentGenre = searchParams.get('genre')
-  const currentGenreName = genres.find(g => g.id.toString() === currentGenre)?.name ?? 'All Categories'
+  const currentGenre = searchParams.get("genre");
+  const currentGenreName =
+    genres.find((g) => g.id.toString() === currentGenre)?.name ??
+    "All Categories";
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -56,13 +58,15 @@ export function CategoryFilter({ genres }: CategoryFilterProps) {
           <CommandGroup>
             <CommandItem
               onSelect={() => {
-                setValue('')
-                setOpen(false)
-                router.push('/')
+                setValue("");
+                setOpen(false);
+                router.push("/");
               }}
             >
               <Check
-                className={`mr-2 h-4 w-4 ${!currentGenre ? 'opacity-100' : 'opacity-0'}`}
+                className={`mr-2 h-4 w-4 ${
+                  !currentGenre ? "opacity-100" : "opacity-0"
+                }`}
               />
               All Categories
             </CommandItem>
@@ -70,14 +74,16 @@ export function CategoryFilter({ genres }: CategoryFilterProps) {
               <CommandItem
                 key={genre.id}
                 onSelect={() => {
-                  setValue(genre.id.toString())
-                  setOpen(false)
-                  router.push(`/?genre=${genre.id}`)
+                  setValue(genre.id.toString());
+                  setOpen(false);
+                  router.push(`/?genre=${genre.id}`);
                 }}
               >
                 <Check
                   className={`mr-2 h-4 w-4 ${
-                    currentGenre === genre.id.toString() ? 'opacity-100' : 'opacity-0'
+                    currentGenre === genre.id.toString()
+                      ? "opacity-100"
+                      : "opacity-0"
                   }`}
                 />
                 {genre.name}
@@ -87,6 +93,5 @@ export function CategoryFilter({ genres }: CategoryFilterProps) {
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
-
